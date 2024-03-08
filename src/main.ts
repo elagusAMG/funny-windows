@@ -6,7 +6,7 @@ const video = document.querySelector<HTMLVideoElement>("video");
 const svg = document.querySelector<SVGElement>("svg");
 const path = document.querySelector<SVGElement>("svg path");
 
-type WindowDetails = {
+interface WindowDetails {
   screenX: number;
   screenY: number;
   screenWidth: number;
@@ -15,6 +15,11 @@ type WindowDetails = {
   height: number;
   updated: number;
 };
+
+interface ExtendedWindowDetails extends WindowDetails {
+  x: number;
+  y: number;
+}
 
 function getScreens(): [string, WindowDetails][] {
   return Object.entries(window.localStorage)
@@ -99,7 +104,7 @@ function makeSVG() {
       const y = screen.screenY + screen.height / 2;
       return [key, { ...screen, x, y }];
     })
-    .forEach(([key, screen], i) => {
+    .forEach(([_key, screen]: [string, ExtendedWindowDetails], i) => {
       if (i === 0) {
         screenPath.moveTo(screen.x, screen.y);
       } else {
